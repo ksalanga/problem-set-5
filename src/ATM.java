@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Scanner;
 /**
  * Just like last time, the ATM class is responsible for managing all
@@ -12,31 +13,37 @@ import java.util.Scanner;
  */
 
 public class ATM {
-	private Scanner in;
+	private Database database;
 	
-	private BankAccount bankAccount;
+	//private Scanner in;
 	
-	public ATM(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
-	}
-
+	
+	
 	public static void main(String args[]) {
-		ATM atm = new ATM(
-				new BankAccount(						// create new BankAccount
-					0,							// initial balance is 0
-					new AccountHolder(						// create new User
-						1234,						// PIN is 1234
-						"Kenneth Salanga",					// name is Kenneth Salanga
-						"December 9, 2000",				// date of birth is December 9, 2000
-						"123 street"		// address is 123 street
-					)
-				)
-			);
-
+		ATM atm = new ATM(new Database());
+		
 		atm.run();
+		
+	}
+	
+	
+	
+	
+	
+	public ATM(Database database) {
+		this.database = database;
 	}
 	
 	public void run() {
+		try {
+			BankAccount account = this.database.getAccount(100000002L);
+			System.out.println(account.getUser().getCity());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**public void run() {
 		in = new Scanner(System.in);
 		boolean secure = false;
 		
@@ -118,5 +125,5 @@ public class ATM {
 			}
 		}
 		in.close();
-	}	
+	}	**/
 }

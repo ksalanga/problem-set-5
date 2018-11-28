@@ -10,8 +10,6 @@
 
 public class BankAccount {
 	
-	private static long generatedAccountNumber;
-	
 	private long accountNumber;
 	private double balance;
 	private User user;
@@ -23,8 +21,8 @@ public class BankAccount {
 	 * @param user
 	 */
 	
-	public BankAccount(double balance, User user) {
-		this.accountNumber = BankAccount.generatedAccountNumber++;
+	public BankAccount(long accountNumber, double balance, User user) {
+		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.user = user;
 	}

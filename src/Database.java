@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 /**
  * This class will serve as the intermediary between our ATM program and
  * the database of BankAccounts. It'll be responsible for fetching accounts
@@ -12,22 +8,49 @@ import java.io.IOException;
 
 public class Database {
 	
-	private File file;
-	
-	public Database(File file) {
-		this.file = file;
+	public BankAccount getAccount(long accountNumber) throws Exception {
+		BankAccount account = null;
+		
+		try(BufferedReader br = new BufferedReader(new FileReader("accounts-db.txt"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				long acctNum = Long.parseLong(line.substring(0,9));
+				
+				if (acctNum == accountNumber && line.charAt(148) == 'Y') {
+					int pin = Integer.parseInt(line.substring(9, 13));
+					double balance = Double.parseDouble(line.substring(13, 28));
+					String lname = line.substring(28, 48).trim();
+					String fname = line.substring(48, 63).trim();
+					String dob = line.substring(63, 71);
+					long phone = Long.parseLong(line.substring(71, 81));
+					String address = line.substring(81, 111).trim();
+					String city = line.substring(111, 141).trim();
+					String state = line.substring(141, 143);
+					String postalcode = line.substring(143, 148);
+					
+					account = new BankAccount(acctNum, balance, new User(pin, fname, lname, dob, phone, address, city, state, postalcode));
+					break;
+				}
+			}
+		}
+				
+		return account;
 	}
 	
-	public BankAccount AccountCreation(File file) throws IOException{
-		try(BufferedReader br = new BufferedReader(new FileReader("accounts-db.txt"))) {
+	
+	
+	
+	/** public BankAccount AccountCreation(File file) throws IOException{
+		try(BufferedReader br = new BufferedReader("accounts-db.txt") {
 			String line;
 			
 			while((line = br.readLine()) != null) {
-				String acount = line.substring(0,10);
+				String account = line.substring(0,8);
 			}
 		}
 		
-		return BankAccount;
-	}
+		return bankAccount;
+	} **/
+
 	
 }
