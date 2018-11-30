@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 /**
  * This class will serve as the intermediary between our ATM program and
  * the database of BankAccounts. It'll be responsible for fetching accounts
@@ -7,6 +8,27 @@ import java.io.*;
  */
 
 public class Database {
+	
+	private String[] accounts;
+	
+	public String[] getAllAccounts() throws IOException {
+		String[] accounts = new String[10];
+		
+		int index = 0;
+		try(BufferedReader br = new BufferedReader(new FileReader("accounts-db.txt"))) {
+			String line;
+			
+			while ((line = br.readLine()) != null) {
+				if (index >= accounts.length) {
+					accounts = Arrays.copyOf(accounts, accounts.length + 10);
+				}
+				
+				accounts[index++] = line;
+			}
+		}
+		
+		return Arrays.copyOf(accounts, --index);
+	}
 	
 	public BankAccount getAccount(long accountNumber) throws Exception {
 		BankAccount account = null;
@@ -35,6 +57,48 @@ public class Database {
 		}
 				
 		return account;
+	}
+	
+	public void updateAccount(BankAccount account, BankAccount destination) throws IOException {
+		accounts = getAllAccounts();
+		
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("accounts-db.txt"))) {
+			
+			if (account != null) {
+				boolean newAccount = true;
+				
+				for (int i = 0; i < accounts.length; i++) {
+					if (accounts[i].startsWith(String.valueOf(account.getAccountNumber()))) {
+						accounts[i] = account.toString();
+						newAccount = false;
+					}
+				}
+				
+				if (newAccount == true) {
+					accounts = Arrays.copyOf(accounts, accounts.length + 1);
+					accounts[accounts.length - 1] = account.toString();
+				}
+			}
+			
+			if(destination != null) {
+				for (int i = 0; i < accounts.length; i++) {
+					if (accounts[i].startsWith(String.valueOf(account.getAccountNumber()))) {
+						accounts[i] = destination.toString();
+					}
+				}
+			}
+			// check if account is not null
+			// update allAccounts array for account
+			
+			// check if destination is not null
+			// update allAccounts array for destination
+			
+			for (int i = 0; i < accounts.length; i++) {
+				bw.write(accounts[i]);
+				bw.newLine();
+			}
+		}
+	
 	}
 	
 	

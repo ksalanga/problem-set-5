@@ -16,25 +16,12 @@ public class ATM {
 	private Database database;
 	
 	//private Scanner in;
-	
-	
-	
-	public static void main(String args[]) {
-		ATM atm = new ATM(new Database());
-		
-		atm.run();
-		
-	}
-	
-	
-	
-	
-	
+
 	public ATM(Database database) {
 		this.database = database;
 	}
 	
-	public void run() {
+	public void login() {
 		try {
 			BankAccount account = this.database.getAccount(100000002L);
 			System.out.println(account.getUser().getCity());
