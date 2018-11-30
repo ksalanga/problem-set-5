@@ -97,6 +97,9 @@ public class BankAccount {
 	 * @param amount the money to deposit
 	 * @return a status code (0: invalid amount, 1: success)
 	 */
+	public void transfer() {
+		
+	}
 	
 	public int deposit(double amount) {
 		if (amount <= 0) {
@@ -124,5 +127,11 @@ public class BankAccount {
 			balance = balance - amount;
 			return 2;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		balance = 312312;
+		return "";
 	}
 }
