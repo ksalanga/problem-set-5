@@ -8,7 +8,6 @@ import java.util.Arrays;
  */
 
 public class Database {
-	
 	private String[] accounts;
 	
 	public String[] getAllAccounts() throws IOException {
@@ -27,7 +26,7 @@ public class Database {
 			}
 		}
 		
-		return Arrays.copyOf(accounts, --index);
+		return Arrays.copyOf(accounts, index);
 	}
 	
 	public BankAccount getAccount(long accountNumber) throws Exception {
@@ -49,8 +48,9 @@ public class Database {
 					String city = line.substring(111, 141).trim();
 					String state = line.substring(141, 143);
 					String postalcode = line.substring(143, 148);
+					char status = line.charAt(148);
 					
-					account = new BankAccount(acctNum, balance, new User(pin, fname, lname, dob, phone, address, city, state, postalcode));
+					account = new BankAccount(acctNum, balance, new User(pin, fname, lname, dob, phone, address, city, state, postalcode, status));
 					break;
 				}
 			}
@@ -87,11 +87,6 @@ public class Database {
 					}
 				}
 			}
-			// check if account is not null
-			// update allAccounts array for account
-			
-			// check if destination is not null
-			// update allAccounts array for destination
 			
 			for (int i = 0; i < accounts.length; i++) {
 				bw.write(accounts[i]);
@@ -101,20 +96,20 @@ public class Database {
 	
 	}
 	
-	
-	
-	
-	/** public BankAccount AccountCreation(File file) throws IOException{
-		try(BufferedReader br = new BufferedReader("accounts-db.txt") {
+	public long maxNumber() {
+		try (BufferedReader br = new BufferedReader(new FileReader("accounts-db.txt"))) {
 			String line;
-			
-			while((line = br.readLine()) != null) {
-				String account = line.substring(0,8);
+			long max = 100000000;
+			while ((line = br.readLine()) != null) {
+				if (Long.parseLong(line.substring(0, 9)) > max) {
+					max = Long.parseLong(line.substring(0, 9));
+				}
 			}
+			return max;
 		}
-		
-		return bankAccount;
-	} **/
-
-	
+		catch (IOException e) {
+			System.out.println("No accounts.");
+			return 100000000;
+		}
+	}
 }
