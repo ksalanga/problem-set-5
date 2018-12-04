@@ -39,13 +39,13 @@ public class ATM {
 				"   [3] Quit\r\n" + 
 				"\r\n" + 
 				"Make a selection: ");
-		switch(in.nextInt()) {
-		case 1: 
+		switch(in.next().charAt(0)) {
+		case '1': 
 			System.out.println("Alright, so you're opening a new account. Enter your information");
 			this.createAccount();
 			screen();
 			break;
-		case 2:
+		case '2':
 			System.out.print("Please enter your account credentials.\r\n" + 
 					"\r\n" + 
 					"Account # : ");
@@ -64,7 +64,7 @@ public class ATM {
 				menu();
 			}
 			break;
-		case 3: 
+		case '3': 
 			System.out.print("Powering Off.");
 			break;
 			
@@ -90,8 +90,8 @@ public class ATM {
 				"\r\n" + 
 				"Make a selection:");
 		
-		switch (in.nextInt()) {
-		case 1:
+		switch (in.next().charAt(0)) {
+		case '1':
 			System.out.println("How much would you like to deposit?");
 			try {
 				double deposit = in.nextDouble();
@@ -108,7 +108,7 @@ public class ATM {
 			}
 			screen();
 			break;
-		case 2:
+		case '2':
 			System.out.println("How much would you like to withdraw?");
 			try {
 				if (this.currentAccount.getBalance() == 0) {
@@ -139,35 +139,39 @@ public class ATM {
 			}
 			screen();
 			break;
-		case 3:
+		case '3':
 			if (this.currentAccount.getBalance() == 0) {
 				System.out.print("\nYou don't have any money to withdraw. Try depositing money first.");
 				screen();
 			} else {
 				System.out.print("Enter Destination Account #: ");
-				Long destinationAmt = in.nextLong();
-				this.destination = this.database.getAccount(destinationAmt);
-				System.out.print("Enter Amount: ");
-				double amount = in.nextDouble();
-				if(this.destination == null) {
-					System.out.print("Account Not Found");
-					screen();
-				} else {
-					this.currentAccount.withdraw(amount);
-					this.destination.setBalance(this.destination.getBalance() + amount);
-					this.database.updateAccount(this.currentAccount, this.destination);
-					System.out.print("Transferred " + "$" + amount + " to " + this.destination.getAccountNumber() + ". Your updated balance is $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
-					
+				try {
+					Long destinationAmt = in.nextLong();
+					this.destination = this.database.getAccount(destinationAmt);
+					System.out.print("Enter Amount: ");
+					double amount = in.nextDouble();
+					if(this.destination == null) {
+						System.out.print("Account Not Found");
+						screen();
+					} else {
+						this.currentAccount.withdraw(amount);
+						this.destination.setBalance(this.destination.getBalance() + amount);
+						this.database.updateAccount(this.currentAccount, this.destination);
+						System.out.print("Transferred " + "$" + amount + " to " + this.destination.getAccountNumber() + ". Your updated balance is $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
+						
+					}
+				} catch (InvalidParameterException e) {
+					System.out.println(e.getMessage()); 
 				}
 			}
 			
 			break;
-		case 4:
+		case '4':
 			this.database.updateAccount(this.currentAccount, null);
 			System.out.println("Current balance is: $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
 			screen();
 			break;
-		case 5:
+		case '5':
 			System.out.println("Account Number: " + this.currentAccount.getAccountNumber());
 			System.out.println("Account Holder: " + this.currentAccount.getUser().getfirstName() + " " + this.currentAccount.getUser().getlastName());
 			System.out.println("Address: " + this.currentAccount.getUser().getstreetAddress() + " " + this.currentAccount.getUser().getCity() + ", " + this.currentAccount.getUser().getState() + " " + this.currentAccount.getUser().getpostalCode());
@@ -175,7 +179,7 @@ public class ATM {
 			System.out.println("Telephone: " + this.currentAccount.getUser().getPhone());
 			screen();
 			break;
-		case 6:
+		case '6':
 			//while (!this.currentAccount.getUser().updateInfo(in)) ;
 			System.out.println("Select the personal information you wish to update.\r\n" + 
 					"\r\n" + 
@@ -185,8 +189,8 @@ public class ATM {
 					"\r\n" + 
 					"Make a selection: ");
 			
-			switch(in.nextInt()) {
-			case 1:
+			switch(in.next().charAt(0)) {
+			case '1':
 				System.out.print("Enter current PIN #: ");
 				int test = in.nextInt();
 				if(test == this.currentAccount.getUser().getPIN()) {
@@ -206,7 +210,7 @@ public class ATM {
 				}
 				screen();
 				break;
-			case 2:
+			case '2':
 				System.out.print("Enter new number: ");
 				long phone = in.nextLong();
 				if (String.valueOf(phone).length() == 10) {
@@ -219,7 +223,7 @@ public class ATM {
 					screen();
 				}
 				break;
-			case 3:
+			case '3':
 				System.out.print("Enter new street address : ");
 				in.nextLine();
 				String address = in.nextLine();
@@ -247,7 +251,7 @@ public class ATM {
 			}
 			break;
 
-		case 7:
+		case '7':
 			System.out.print("Aw, we're sorry to see you go... Are you sure?\r\n" + 
 					"\r\n" + 
 					"Confirm (Y/N):");
@@ -262,7 +266,7 @@ public class ATM {
 			}
 			this.database.updateAccount(this.currentAccount, null);
 			break;
-		case 8:
+		case '8':
 			System.out.println("Logging out");
 			this.database.updateAccount(this.currentAccount, null);
 			this.currentAccount = null;
