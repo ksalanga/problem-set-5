@@ -55,6 +55,9 @@ public class Database {
 				}
 			}
 		}
+		catch(IOException e) {
+			System.out.print(e.getMessage());
+		}
 				
 		return account;
 	}
@@ -99,7 +102,7 @@ public class Database {
 	public long maxNumber() {
 		try (BufferedReader br = new BufferedReader(new FileReader("accounts-db.txt"))) {
 			String line;
-			long max = 100000000;
+			long max = 100000001;
 			while ((line = br.readLine()) != null) {
 				if (Long.parseLong(line.substring(0, 9)) > max) {
 					max = Long.parseLong(line.substring(0, 9));
@@ -109,7 +112,7 @@ public class Database {
 		}
 		catch (IOException e) {
 			System.out.println("No accounts.");
-			return 100000000;
+			return 100000001;
 		}
 	}
 }

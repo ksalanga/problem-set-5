@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class BankAccount {
 	
 	private long accountNumber;
+	private Database acctNumFinder = new Database();
 	private static long maxNum;
 	private double balance;
 	private User user;
@@ -40,15 +41,16 @@ public class BankAccount {
 	 * 
 	 * @return accountNumber
 	 */
-	
-	BankAccount(Database database) {
+
+	public long getMax(Database database) {
 		maxNum = database.maxNumber() + 1;
+		return maxNum;
 	}
 	
-	BankAccount(Scanner in) {
+	public BankAccount(Scanner in) {
 		this.user = new User(in);
-		this.accountNumber = maxNum++;
-		this.balance = 0;
+		this.accountNumber = getMax(acctNumFinder);
+		this.balance = 0.00;
 	}
 	
 	public long getAccountNumber() {
