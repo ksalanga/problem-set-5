@@ -46,23 +46,30 @@ public class ATM {
 			screen();
 			break;
 		case '2':
-			System.out.print("Please enter your account credentials.\r\n" + 
-					"\r\n" + 
-					"Account # : ");
-			long account = in.nextLong();
-			this.currentAccount = this.database.getAccount(account);
-			if(this.currentAccount == null) {
-				System.out.print("Invalid Account #");
-				menu();
+			try {
+				System.out.print("Please enter your account credentials.\r\n" + 
+						"\r\n" + 
+						"Account # : ");
+				long account = in.nextLong();
+				this.currentAccount = this.database.getAccount(account);
+				if(this.currentAccount == null) {
+					System.out.print("Invalid Account #");
+					menu();
+				}
+				System.out.print("    PIN # : ");
+				int pin = in.nextInt();
+				if(this.currentAccount.getUser().getPIN() == pin) {
+					screen();
+				} else {
+					System.out.print("Invalid PIN");
+					menu();
+				}
+			} catch (InvalidParameterException e) {
+				System.out.println(e.getMessage());
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid");
 			}
-			System.out.print("    PIN # : ");
-			int pin = in.nextInt();
-			if(this.currentAccount.getUser().getPIN() == pin) {
-				screen();
-			} else {
-				System.out.print("Invalid PIN");
-				menu();
-			}
+			
 			break;
 		case '3': 
 			System.out.print("Powering Off.");
